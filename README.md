@@ -5,6 +5,24 @@
 game and graphics related mathematics.
 
 
+Library | Latest Version | Description
+--------|----------------|------------
+gm_math.hpp | 1.0.0 | Like `math.h` but for gamedev specific functions
+
+
+## Libraries
+
+
+### math.hpp
+
+If you're developing on Windows and have any Windows headers
+included. Then macros `min` and `max` might have been defined.
+This will (at least) break `gm_math.hpp` (as well as `gm_linear.hpp`).
+
+To counteract this either `#undef` `min` and `max` or `#define` `NOMINMAX`
+before including any Windows headers.
+
+
 ## Reporting Bugs & Requests
 
 Feel free to use the [issue tracker][GameMathIssues],
@@ -18,7 +36,7 @@ Before submitting bugs, make sure that you're using the latest version of [GameM
 ```
 GameMath <https://github.com/MrVallentin/GameMath>
 
-Copyright (c) 2013-2016 Christian Vallentin <mail@vallentinsource.com>
+Copyright (c) 2012-2016 Christian Vallentin <mail@vallentinsource.com>
 
 This software is provided 'as-is', without any express or implied
 warranty. In no event will the authors be held liable for any damages
