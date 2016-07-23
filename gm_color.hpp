@@ -4,7 +4,7 @@
 // Repository: https://github.com/MrVallentin/GameMath
 //
 // Date Created: September 24, 2012
-// Last Modified: July 22, 2016
+// Last Modified: July 23, 2016
 
 // Copyright (c) 2012-2016 Christian Vallentin <mail@vallentinsource.com>
 //
@@ -39,8 +39,8 @@
 
 #ifndef GM_STRINGIFY_VERSION
 #	define _GM_STRINGIFY(str) #str
-#	define _GM_STRINGIFY_TOKEN(str) _GM_COLOR_STRINGIFY(str)
-#	define GM_STRINGIFY_VERSION(major, minor, patch) _GM_COLOR_STRINGIFY(major) "." _GM_COLOR_STRINGIFY(minor) "." _GM_COLOR_STRINGIFY(patch)
+#	define _GM_STRINGIFY_TOKEN(str) _GM_STRINGIFY(str)
+#	define GM_STRINGIFY_VERSION(major, minor, patch) _GM_STRINGIFY(major) "." _GM_STRINGIFY(minor) "." _GM_STRINGIFY(patch)
 #endif
 
 
@@ -58,23 +58,28 @@
 #include <math.h>
 
 
+#define GM_COLOR_API static
+
+
 #ifndef GM_NO_NAMESPACE
 namespace gm {
 #endif
 
 
-void int2rgb(const int rgb, int *r, int *g, int *b, int *a = nullptr);
-int rgb2int(const int r, const int g, const int b, const int a = 255);
+GM_COLOR_API void int2rgb(const int rgb, int *r, int *g, int *b, int *a = nullptr);
+GM_COLOR_API int rgb2int(const int r, const int g, const int b, const int a = 255);
 
 
-template<typename T> T grayscale(T r, T g, T b);
+// Any color range can be used, whether that
+// is [0;1], [0;255] or something else.
+template<typename T> GM_COLOR_API T grayscale(T r, T g, T b);
 
 
 // After this point everything you'll see is all
 // the definitions to the prior declarations.
 
 
-void int2rgb(const int rgb, int *r, int *g, int *b, int *a)
+GM_COLOR_API void int2rgb(const int rgb, int *r, int *g, int *b, int *a)
 {
 	if (a) (*a) = (rgb >> 24) & 0xFF;
 	if (r) (*r) = (rgb >> 16) & 0xFF;
@@ -82,13 +87,13 @@ void int2rgb(const int rgb, int *r, int *g, int *b, int *a)
 	if (b) (*b) = rgb & 0xFF;
 }
 
-int rgb2int(const int r, const int g, const int b, const int a)
+GM_COLOR_API int rgb2int(const int r, const int g, const int b, const int a)
 {
 	return ((a & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | (b & 0xFF);
 }
 
 
-template<typename T> T grayscale(T r, T g, T b)
+template<typename T> GM_COLOR_API T grayscale(T r, T g, T b)
 {
 	// The human eye is more sensitive to green colors and the least to blue.
 	// So weighting the color channels gives a more physically accurate result.
@@ -98,7 +103,7 @@ template<typename T> T grayscale(T r, T g, T b)
 	return (r * T(0.2126) + g * T(0.7152) + b * T(0.0722)); // Better
 }
 
-template<> int grayscale(int r, int g, int b)
+template<> GM_COLOR_API int grayscale(int r, int g, int b)
 {
 	return static_cast<int>(grayscale<double>(static_cast<double>(r) / 255.0, static_cast<double>(g) / 255.0, static_cast<double>(b) / 255.0) * 255.0);
 }
