@@ -72,7 +72,7 @@ namespace gm {
 namespace easing {
 
 
-template<typename T> GM_EASING_API T linear(const T time);
+template<typename T> GM_EASING_API T easeLinear(const T time);
 
 template<typename T> GM_EASING_API T easeInQuad(const T time);
 template<typename T> GM_EASING_API T easeOutQuad(const T time);
@@ -119,7 +119,7 @@ template<typename T> GM_EASING_API T easeInOutBounce(const T time);
 // the definitions to the prior declarations.
 
 
-template<typename T> GM_EASING_API inline T linear(const T time)
+template<typename T> GM_EASING_API inline T easeLinear(const T time)
 {
 	return time;
 }
