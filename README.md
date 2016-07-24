@@ -9,6 +9,12 @@ Library | Latest Version | Description
 --------|----------------|------------
 gm_math.hpp | 1.0.0 | Like `math.h` but for gamedev specific functions
 gm_color.hpp | 1.0.0 | Contains functionality for converting between color models and changing colorfulness
+gm_easing.hpp | 1.0.0 | Contains simple easing functions
+
+
+[GameMath][GameMath] is compatible with both C and C++. Files denoted with `.h`
+is compatible with both C and C++, whereas files denoted with `.hpp` is only
+compatible with C++.
 
 
 ## Libraries
