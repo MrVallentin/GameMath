@@ -4,7 +4,7 @@
 // Repository: https://github.com/MrVallentin/GameMath
 //
 // Date Created: September 24, 2012
-// Last Modified: July 23, 2016
+// Last Modified: July 26, 2016
 
 // Copyright (c) 2012-2016 Christian Vallentin <mail@vallentinsource.com>
 //
@@ -47,7 +47,7 @@
 #define GM_COLOR_NAME "GameMath Color"
 
 #define GM_COLOR_VERSION_MAJOR 1
-#define GM_COLOR_VERSION_MINOR 0
+#define GM_COLOR_VERSION_MINOR 1
 #define GM_COLOR_VERSION_PATCH 0
 
 #define GM_COLOR_VERSION GM_STRINGIFY_VERSION(GM_COLOR_VERSION_MAJOR, GM_COLOR_VERSION_MINOR, GM_COLOR_VERSION_PATCH)
@@ -73,6 +73,25 @@ GM_COLOR_API int rgb2int(const int r, const int g, const int b, const int a = 25
 // Any color range can be used, whether that
 // is [0;1], [0;255] or something else.
 template<typename T> GM_COLOR_API T grayscale(T r, T g, T b);
+
+
+template<typename T> GM_COLOR_API void hue2rgb(
+	const T &hue,
+	T *r, T* g, T* b);
+
+
+template<typename T> GM_COLOR_API void hsl2rgb(
+	const T &h, const T &s, const T &l,
+	T *r, T *g, T *b);
+
+template<typename T> GM_COLOR_API void rgb2hsl(
+	const T &r, const T &g, const T &b,
+	T *h, T *s, T *l);
+
+
+template<typename T> GM_COLOR_API void rgb2hcv(
+	const T &r, const T &g, const T &b,
+	T *h, T *c, T *v);
 
 
 // After this point everything you'll see is all
@@ -106,6 +125,90 @@ template<typename T> GM_COLOR_API T grayscale(T r, T g, T b)
 template<> GM_COLOR_API int grayscale(int r, int g, int b)
 {
 	return static_cast<int>(grayscale<double>(static_cast<double>(r) / 255.0, static_cast<double>(g) / 255.0, static_cast<double>(b) / 255.0) * 255.0);
+}
+
+
+template<typename T> GM_COLOR_API void hue2rgb(
+	const T &hue,
+	T *r, T* g, T* b)
+{
+	if (r) (*r) = abs(hue * T(6) - T(3)) - T(1);
+	if (g) (*g) = T(2) - abs(hue * T(6) - T(2));
+	if (b) (*b) = T(2) - abs(hue * T(6) - T(4));
+
+	if (r) (*r) = (((*r) > T(1)) ? T(1) : ((T(0) > (*r)) ? T(0) : (*r)));
+	if (g) (*g) = (((*g) > T(1)) ? T(1) : ((T(0) > (*g)) ? T(0) : (*g)));
+	if (b) (*b) = (((*b) > T(1)) ? T(1) : ((T(0) > (*b)) ? T(0) : (*b)));
+}
+
+
+template<typename T> GM_COLOR_API void hsl2rgb(
+	const T &h, const T &s, const T &l,
+	T *r, T *g, T *b)
+{
+	hue2rgb<T>(h, r, g, b);
+
+	const T c = (T(1) - abs(T(2) * l - T(1))) * s;
+
+	if (r) (*r) = ((*r) - T(0.5)) * c + l;
+	if (g) (*g) = ((*g) - T(0.5)) * c + l;
+	if (b) (*b) = ((*b) - T(0.5)) * c + l;
+}
+
+template<typename T> GM_COLOR_API void rgb2hsl(
+	const T &r, const T &g, const T &b,
+	T *h, T *s, T *l)
+{
+	T c, v;
+	rgb2hcv<T>(r, g, b, h, &c, &v);
+
+	const T L = v - c * T(0.5);
+
+	if (s) (*s) = c / (T(1) - abs(L * T(2) - T(1)) + T(1E-10));
+	if (l) (*l) = L;
+}
+
+
+template<typename T> GM_COLOR_API void rgb2hcv(
+	const T &r, const T &g, const T &b,
+	T *h, T *c, T *v)
+{
+	T x, y, z, w;
+	T x2, y2, z2;
+
+	if (g < b)
+	{
+		x = b;
+		y = g;
+		z = T(-1);
+		w = T(2) / T(3);
+	}
+	else
+	{
+		x = g;
+		y = b;
+		z = T(0);
+		w = T(-1) / T(3);
+	}
+
+	if (r < x)
+	{
+		x2 = x;
+		y2 = r;
+		z2 = w;
+	}
+	else
+	{
+		x2 = r;
+		y2 = x;
+		z2 = z;
+	}
+
+	const T C = x2 - ((y2 > y) ? y : y2);
+
+	if (h) (*h) = abs((y2 - y) / (T(6) * C + T(1E-10)) + z2);
+	if (c) (*c) = C;
+	if (v) (*v) = x2;
 }
 
 
