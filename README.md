@@ -8,7 +8,7 @@ game and graphics related mathematics.
 Library | Latest Version | Description
 --------|----------------|------------
 gm_math.hpp | 1.0.0 | Like `math.h` but for gamedev specific functions
-gm_color.hpp | 1.0.0 | Contains functionality for converting between color models and changing colorfulness
+gm_color.hpp | 1.1.0 | Contains functionality for converting between color models and changing colorfulness
 gm_easing.hpp | 1.0.0 | Contains simple easing functions
 
 
@@ -28,6 +28,21 @@ This will (at least) break `gm_math.hpp` (as well as `gm_linear.hpp`).
 
 To counteract this either `#undef` `min` and `max` or `#define` `NOMINMAX`
 before including any Windows headers.
+
+
+### gm_color.hpp
+
+#### HSL & RGB Conversion
+
+Depending on the software HSL is represented in different
+ranges. **H**ue, **S**aturation and **L**ightness (or brightness)
+is usually represented as a range between [0;240]. As HSL is
+also visually represented as a cylinder, H, S, L is thereby usually
+represented as Hue being an angle from [0;360] and Saturation and
+Lightness being a percentage [0;100%].
+
+For ease of use the library's HSL and RGB converter takes and
+outputs in the range of [0;1].
 
 
 ## Reporting Bugs & Requests
