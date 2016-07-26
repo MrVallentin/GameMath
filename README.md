@@ -20,7 +20,7 @@ compatible with C++.
 ## Libraries
 
 
-### math.hpp
+### Math (`gm_math.hpp`)
 
 If you're developing on Windows and have any Windows headers
 included. Then macros `min` and `max` might have been defined.
@@ -30,7 +30,7 @@ To counteract this either `#undef` `min` and `max` or `#define` `NOMINMAX`
 before including any Windows headers.
 
 
-### gm_color.hpp
+### Color (`gm_color.hpp`)
 
 #### HSL & RGB Conversion
 
