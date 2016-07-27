@@ -4,7 +4,7 @@
 // Repository: https://github.com/MrVallentin/GameMath
 //
 // Date Created: September 24, 2012
-// Last Modified: July 26, 2016
+// Last Modified: July 27, 2016
 
 // Copyright (c) 2012-2016 Christian Vallentin <mail@vallentinsource.com>
 //
@@ -47,7 +47,7 @@
 #define GM_COLOR_NAME "GameMath Color"
 
 #define GM_COLOR_VERSION_MAJOR 1
-#define GM_COLOR_VERSION_MINOR 1
+#define GM_COLOR_VERSION_MINOR 2
 #define GM_COLOR_VERSION_PATCH 0
 
 #define GM_COLOR_VERSION GM_STRINGIFY_VERSION(GM_COLOR_VERSION_MAJOR, GM_COLOR_VERSION_MINOR, GM_COLOR_VERSION_PATCH)
@@ -73,6 +73,16 @@ GM_COLOR_API int rgb2int(const int r, const int g, const int b, const int a = 25
 // Any color range can be used, whether that
 // is [0;1], [0;255] or something else.
 template<typename T> GM_COLOR_API T grayscale(T r, T g, T b);
+
+
+// This function is the equivalent of (OpenGL):
+// glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//
+// Range [0;1]
+template<typename T> GM_COLOR_API void blend(
+	T srcR, T srcG, T srcB, T srcA,
+	T dstR, T dstG, T dstB, T dstA,
+	T *resR, T *resG, T *resB, T *resA);
 
 
 template<typename T> GM_COLOR_API void hue2rgb(
@@ -125,6 +135,21 @@ template<typename T> GM_COLOR_API T grayscale(T r, T g, T b)
 template<> GM_COLOR_API int grayscale(int r, int g, int b)
 {
 	return static_cast<int>(grayscale<double>(static_cast<double>(r) / 255.0, static_cast<double>(g) / 255.0, static_cast<double>(b) / 255.0) * 255.0);
+}
+
+
+template<typename T> GM_COLOR_API void blend(
+	T srcR, T srcG, T srcB, T srcA,
+	T dstR, T dstG, T dstB, T dstA,
+	T *resR, T *resG, T *resB, T *resA)
+{
+	const T sourceFactor = srcA;
+	const T destinationFactor = T(1) - srcA;
+
+	if (resR) (*resR) = srcR * sourceFactor + dstR * destinationFactor;
+	if (resG) (*resG) = srcG * sourceFactor + dstG * destinationFactor;
+	if (resB) (*resB) = srcB * sourceFactor + dstB * destinationFactor;
+	if (resA) (*resA) = srcA * sourceFactor + dstA * destinationFactor;
 }
 
 
