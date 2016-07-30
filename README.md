@@ -56,8 +56,6 @@ Before submitting bugs, make sure that you're using the latest version of [GameM
 ## License
 
 ```
-GameMath <https://github.com/MrVallentin/GameMath>
-
 Copyright (c) 2012-2016 Christian Vallentin <mail@vallentinsource.com>
 
 This software is provided 'as-is', without any express or implied
